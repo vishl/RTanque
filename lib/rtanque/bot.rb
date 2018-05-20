@@ -7,7 +7,7 @@ module RTanque
     MAX_GUN_ENERGY = Configuration.bot.gun_energy_max
     GUN_ENERGY_FACTOR = Configuration.bot.gun_energy_factor
     attr_reader :arena, :brain, :radar, :turret, :ticks, :health, :fire_power, :gun_energy
-    attr_accessor :gui_window
+    attr_reader :gui_window
     attr_normalized(:speed, Configuration.bot.speed, Configuration.bot.speed_step)
     attr_normalized(:heading, Heading::FULL_RANGE, Configuration.bot.turn_step)
     attr_normalized(:fire_power, Configuration.bot.fire_power)
@@ -34,6 +34,11 @@ module RTanque
       self.position = Point.new(0, 0, self.arena)
       @radar = Radar.new(self, self.heading.clone)
       @turret = Turret.new(self.heading.clone)
+    end
+
+    def gui_window=(gw)
+      @gui_window = gw
+      @brain.gui_window = self.gui_window if @brain.respond_to?(:gui_window=)
     end
 
     def name
